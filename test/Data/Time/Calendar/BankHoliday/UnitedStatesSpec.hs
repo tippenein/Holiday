@@ -30,6 +30,21 @@ spec = do
                   ]
       (sort (bankHolidays 2017)) `shouldBe` dates
 
+    it "gets all dates in 2021 correct" $ do
+      let year = fromGregorian 2021
+      let dates = [ year 1 1
+                  , year 1 18
+                  , year 2 15
+                  , year 5 31
+                  , year 6 18
+                  , year 7 5
+                  , year 9 6
+                  , year 10 11
+                  , year 11 11
+                  , year 11 25
+                  ]
+      (sort (bankHolidays 2021)) `shouldBe` dates
+
     it "do not include dates before the inception of bank holidays" $ do
       (bankHolidays 1932) `shouldBe` []
 

@@ -31,6 +31,7 @@ bankHolidays year = filterHistoric standardHolidays
       , 3 `weeksAfter` firstThursdayIn nov -- thanksgiving
       ] ++ catMaybes [
         weekendHolidayFrom (jan 1)  -- newYearsDay
+      , filterHistoricAndGetClosestWeekday (jun 19) -- juneteenth
       , weekendHolidayFrom (jul 4)  -- independenceDay
       , weekendHolidayFrom (nov 11) -- veteransDay
       , weekendHolidayFrom (dec 25) -- christmas
@@ -77,3 +78,12 @@ firstDayOfWeekOnAfter :: DayOfWeek -> Day -> Day
 firstDayOfWeekOnAfter dw d = if dayOfWeek d == dw 
     then d 
     else firstDayOfWeekOnAfter dw  (addDays 1 d)
+
+-- Juneteenth came into effect in 2021
+filterHistoricAndGetClosestWeekday :: Day -> Maybe Day
+filterHistoricAndGetClosestWeekday d
+  | d < fromGregorian 2021 1 1 = Nothing
+  | otherwise = case weekIndex d of
+    3 -> Just (addDays (-1) d) -- if saturday, use friday
+    4 -> Just (addDays 1 d) -- if sunday, use monday
+    _ -> Just d -- this is a weekday
